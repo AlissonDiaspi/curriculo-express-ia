@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: curriculo-express-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: curriculo_user
+      POSTGRES_PASSWORD: curriculo_dev_password
+      POSTGRES_DB: curriculo_express
+
+    ports:
+      - "127.0.0.1:5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U curriculo_user -d curriculo_express"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

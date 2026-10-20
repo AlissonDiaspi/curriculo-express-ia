@@ -1,0 +1,45 @@
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ResumeStatus {
+  DRAFT
+  READY
+  ARCHIVED
+}
+
+model AnonymousSession {
+  id        String   @id @default(uuid()) @db.Uuid
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  resumes   Resume[]
+
+  @@index([expiresAt])
+}
+
+model Resume {
+  id        String       @id @default(uuid()) @db.Uuid
+  title     String
+  status    ResumeStatus @default(DRAFT)
+  templateId String?
+  content   Json
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  
+sessionId String?           @db.Uuid
+session   AnonymousSession? @relation(fields: [sessionId], references: [id])
+  
+
+  @@index([createdAt])
+  @@index([sessionId])
+}
