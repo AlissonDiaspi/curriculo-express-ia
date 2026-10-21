@@ -116,6 +116,37 @@ export interface ResumeRecord {
   updatedAt: string
 }
 
+export type AiImprovementType =
+  | 'summary'
+  | 'experience'
+
+export type AiImprovementResponse =
+  | {
+      status: 'improved'
+      originalText: string
+      improvedText: string
+      type: AiImprovementType
+      remaining: number
+    }
+  | {
+      status: 'unavailable'
+      originalText: string
+      improvedText: null
+      type: AiImprovementType
+      message: string
+    }
+
+export interface AiUsageResponse {
+  summary: {
+    used: boolean
+    available: boolean
+  }
+  experience: {
+    used: boolean
+    available: boolean
+  }
+}
+
 export const api = {
   createSession: () =>
     apiFetch<SessionResponse>('/sessions', {
@@ -148,10 +179,35 @@ export const api = {
       body: JSON.stringify(body),
     }),
 
-  // Busca a prévia do currículo com marca d'água.
-  // Não retorna o documento final sem proteção.
+  // Prévia com marca d'água.
+  // O download limpo continua protegido.
   getResumePreview: (id: string) =>
     apiFetchBlob(
       `/resumes/${encodeURIComponent(id)}/preview`,
+    ),
+
+  // Gera uma sugestão e consome a utilização
+  // somente se a IA responder com sucesso.
+  improveText: (
+    resumeId: string,
+    text: string,
+    type: AiImprovementType,
+  ) =>
+    apiFetch<AiImprovementResponse>('/ai/improve', {
+      method: 'POST',
+      body: JSON.stringify({
+        resumeId,
+        text,
+        type,
+      }),
+    }),
+
+  // Consulta o consumo salvo no PostgreSQL.
+  getAiUsage: (resumeId: string) =>
+    apiFetch<AiUsageResponse>(
+      `/ai/usage/${encodeURIComponent(resumeId)}`,
+      {
+        cache: 'no-store',
+      },
     ),
 }

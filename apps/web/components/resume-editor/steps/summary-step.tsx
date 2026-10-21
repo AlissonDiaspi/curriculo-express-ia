@@ -82,7 +82,16 @@ export function SummaryStep({ showErrors }: { showErrors: boolean }) {
         </ul>
       </div>
 
-      <AiImproveModal open={aiOpen} onOpenChange={setAiOpen} />
+      <AiImproveModal
+  open={aiOpen}
+  onOpenChange={setAiOpen}
+  text={resume.summary}
+  type="summary"
+  maxLength={SUMMARY_MAX_LENGTH}
+  onApply={(improvedText) => {
+    setSummary(improvedText)
+  }}
+/>
     </div>
   )
 }

@@ -27,18 +27,22 @@ model AnonymousSession {
 }
 
 model Resume {
-  id        String       @id @default(uuid()) @db.Uuid
-  title     String
-  status    ResumeStatus @default(DRAFT)
+  id         String       @id @default(uuid()) @db.Uuid
+  title      String
+  status     ResumeStatus @default(DRAFT)
   templateId String?
-  content   Json
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  content    Json
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
 
-  
-sessionId String?           @db.Uuid
-session   AnonymousSession? @relation(fields: [sessionId], references: [id])
-  
+  sessionId String?           @db.Uuid
+  session   AnonymousSession? @relation(fields: [sessionId], references: [id])
+
+  // Controle de utilização da IA
+  aiSummaryUsed          Boolean   @default(false)
+  aiExperienceUsed       Boolean   @default(false)
+  aiSummaryReservedUntil DateTime?
+  aiExperienceReservedUntil DateTime?
 
   @@index([createdAt])
   @@index([sessionId])

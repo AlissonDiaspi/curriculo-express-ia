@@ -32,6 +32,10 @@ export type ResumeMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   sessionId: string | null
+  aiSummaryUsed: boolean | null
+  aiExperienceUsed: boolean | null
+  aiSummaryReservedUntil: Date | null
+  aiExperienceReservedUntil: Date | null
 }
 
 export type ResumeMaxAggregateOutputType = {
@@ -42,6 +46,10 @@ export type ResumeMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   sessionId: string | null
+  aiSummaryUsed: boolean | null
+  aiExperienceUsed: boolean | null
+  aiSummaryReservedUntil: Date | null
+  aiExperienceReservedUntil: Date | null
 }
 
 export type ResumeCountAggregateOutputType = {
@@ -53,6 +61,10 @@ export type ResumeCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   sessionId: number
+  aiSummaryUsed: number
+  aiExperienceUsed: number
+  aiSummaryReservedUntil: number
+  aiExperienceReservedUntil: number
   _all: number
 }
 
@@ -65,6 +77,10 @@ export type ResumeMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   sessionId?: true
+  aiSummaryUsed?: true
+  aiExperienceUsed?: true
+  aiSummaryReservedUntil?: true
+  aiExperienceReservedUntil?: true
 }
 
 export type ResumeMaxAggregateInputType = {
@@ -75,6 +91,10 @@ export type ResumeMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   sessionId?: true
+  aiSummaryUsed?: true
+  aiExperienceUsed?: true
+  aiSummaryReservedUntil?: true
+  aiExperienceReservedUntil?: true
 }
 
 export type ResumeCountAggregateInputType = {
@@ -86,6 +106,10 @@ export type ResumeCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   sessionId?: true
+  aiSummaryUsed?: true
+  aiExperienceUsed?: true
+  aiSummaryReservedUntil?: true
+  aiExperienceReservedUntil?: true
   _all?: true
 }
 
@@ -170,6 +194,10 @@ export type ResumeGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   sessionId: string | null
+  aiSummaryUsed: boolean
+  aiExperienceUsed: boolean
+  aiSummaryReservedUntil: Date | null
+  aiExperienceReservedUntil: Date | null
   _count: ResumeCountAggregateOutputType | null
   _min: ResumeMinAggregateOutputType | null
   _max: ResumeMaxAggregateOutputType | null
@@ -202,6 +230,10 @@ export type ResumeWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Resume"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resume"> | Date | string
   sessionId?: Prisma.UuidNullableFilter<"Resume"> | string | null
+  aiSummaryUsed?: Prisma.BoolFilter<"Resume"> | boolean
+  aiExperienceUsed?: Prisma.BoolFilter<"Resume"> | boolean
+  aiSummaryReservedUntil?: Prisma.DateTimeNullableFilter<"Resume"> | Date | string | null
+  aiExperienceReservedUntil?: Prisma.DateTimeNullableFilter<"Resume"> | Date | string | null
   session?: Prisma.XOR<Prisma.AnonymousSessionNullableScalarRelationFilter, Prisma.AnonymousSessionWhereInput> | null
 }
 
@@ -214,6 +246,10 @@ export type ResumeOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiSummaryUsed?: Prisma.SortOrder
+  aiExperienceUsed?: Prisma.SortOrder
+  aiSummaryReservedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiExperienceReservedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   session?: Prisma.AnonymousSessionOrderByWithRelationInput
 }
 
@@ -229,6 +265,10 @@ export type ResumeWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Resume"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resume"> | Date | string
   sessionId?: Prisma.UuidNullableFilter<"Resume"> | string | null
+  aiSummaryUsed?: Prisma.BoolFilter<"Resume"> | boolean
+  aiExperienceUsed?: Prisma.BoolFilter<"Resume"> | boolean
+  aiSummaryReservedUntil?: Prisma.DateTimeNullableFilter<"Resume"> | Date | string | null
+  aiExperienceReservedUntil?: Prisma.DateTimeNullableFilter<"Resume"> | Date | string | null
   session?: Prisma.XOR<Prisma.AnonymousSessionNullableScalarRelationFilter, Prisma.AnonymousSessionWhereInput> | null
 }, "id">
 
@@ -241,6 +281,10 @@ export type ResumeOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   sessionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiSummaryUsed?: Prisma.SortOrder
+  aiExperienceUsed?: Prisma.SortOrder
+  aiSummaryReservedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiExperienceReservedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ResumeCountOrderByAggregateInput
   _max?: Prisma.ResumeMaxOrderByAggregateInput
   _min?: Prisma.ResumeMinOrderByAggregateInput
@@ -258,6 +302,10 @@ export type ResumeScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Resume"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Resume"> | Date | string
   sessionId?: Prisma.UuidNullableWithAggregatesFilter<"Resume"> | string | null
+  aiSummaryUsed?: Prisma.BoolWithAggregatesFilter<"Resume"> | boolean
+  aiExperienceUsed?: Prisma.BoolWithAggregatesFilter<"Resume"> | boolean
+  aiSummaryReservedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"Resume"> | Date | string | null
+  aiExperienceReservedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"Resume"> | Date | string | null
 }
 
 export type ResumeCreateInput = {
@@ -268,6 +316,10 @@ export type ResumeCreateInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  aiSummaryUsed?: boolean
+  aiExperienceUsed?: boolean
+  aiSummaryReservedUntil?: Date | string | null
+  aiExperienceReservedUntil?: Date | string | null
   session?: Prisma.AnonymousSessionCreateNestedOneWithoutResumesInput
 }
 
@@ -280,6 +332,10 @@ export type ResumeUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessionId?: string | null
+  aiSummaryUsed?: boolean
+  aiExperienceUsed?: boolean
+  aiSummaryReservedUntil?: Date | string | null
+  aiExperienceReservedUntil?: Date | string | null
 }
 
 export type ResumeUpdateInput = {
@@ -290,6 +346,10 @@ export type ResumeUpdateInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiSummaryUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiExperienceUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSummaryReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiExperienceReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   session?: Prisma.AnonymousSessionUpdateOneWithoutResumesNestedInput
 }
 
@@ -302,6 +362,10 @@ export type ResumeUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSummaryUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiExperienceUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSummaryReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiExperienceReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ResumeCreateManyInput = {
@@ -313,6 +377,10 @@ export type ResumeCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessionId?: string | null
+  aiSummaryUsed?: boolean
+  aiExperienceUsed?: boolean
+  aiSummaryReservedUntil?: Date | string | null
+  aiExperienceReservedUntil?: Date | string | null
 }
 
 export type ResumeUpdateManyMutationInput = {
@@ -323,6 +391,10 @@ export type ResumeUpdateManyMutationInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiSummaryUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiExperienceUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSummaryReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiExperienceReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ResumeUncheckedUpdateManyInput = {
@@ -334,6 +406,10 @@ export type ResumeUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSummaryUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiExperienceUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSummaryReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiExperienceReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ResumeListRelationFilter = {
@@ -355,6 +431,10 @@ export type ResumeCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
+  aiSummaryUsed?: Prisma.SortOrder
+  aiExperienceUsed?: Prisma.SortOrder
+  aiSummaryReservedUntil?: Prisma.SortOrder
+  aiExperienceReservedUntil?: Prisma.SortOrder
 }
 
 export type ResumeMaxOrderByAggregateInput = {
@@ -365,6 +445,10 @@ export type ResumeMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
+  aiSummaryUsed?: Prisma.SortOrder
+  aiExperienceUsed?: Prisma.SortOrder
+  aiSummaryReservedUntil?: Prisma.SortOrder
+  aiExperienceReservedUntil?: Prisma.SortOrder
 }
 
 export type ResumeMinOrderByAggregateInput = {
@@ -375,6 +459,10 @@ export type ResumeMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
+  aiSummaryUsed?: Prisma.SortOrder
+  aiExperienceUsed?: Prisma.SortOrder
+  aiSummaryReservedUntil?: Prisma.SortOrder
+  aiExperienceReservedUntil?: Prisma.SortOrder
 }
 
 export type ResumeCreateNestedManyWithoutSessionInput = {
@@ -427,6 +515,14 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type ResumeCreateWithoutSessionInput = {
   id?: string
   title: string
@@ -435,6 +531,10 @@ export type ResumeCreateWithoutSessionInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  aiSummaryUsed?: boolean
+  aiExperienceUsed?: boolean
+  aiSummaryReservedUntil?: Date | string | null
+  aiExperienceReservedUntil?: Date | string | null
 }
 
 export type ResumeUncheckedCreateWithoutSessionInput = {
@@ -445,6 +545,10 @@ export type ResumeUncheckedCreateWithoutSessionInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  aiSummaryUsed?: boolean
+  aiExperienceUsed?: boolean
+  aiSummaryReservedUntil?: Date | string | null
+  aiExperienceReservedUntil?: Date | string | null
 }
 
 export type ResumeCreateOrConnectWithoutSessionInput = {
@@ -485,6 +589,10 @@ export type ResumeScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Resume"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resume"> | Date | string
   sessionId?: Prisma.UuidNullableFilter<"Resume"> | string | null
+  aiSummaryUsed?: Prisma.BoolFilter<"Resume"> | boolean
+  aiExperienceUsed?: Prisma.BoolFilter<"Resume"> | boolean
+  aiSummaryReservedUntil?: Prisma.DateTimeNullableFilter<"Resume"> | Date | string | null
+  aiExperienceReservedUntil?: Prisma.DateTimeNullableFilter<"Resume"> | Date | string | null
 }
 
 export type ResumeCreateManySessionInput = {
@@ -495,6 +603,10 @@ export type ResumeCreateManySessionInput = {
   content: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  aiSummaryUsed?: boolean
+  aiExperienceUsed?: boolean
+  aiSummaryReservedUntil?: Date | string | null
+  aiExperienceReservedUntil?: Date | string | null
 }
 
 export type ResumeUpdateWithoutSessionInput = {
@@ -505,6 +617,10 @@ export type ResumeUpdateWithoutSessionInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiSummaryUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiExperienceUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSummaryReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiExperienceReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ResumeUncheckedUpdateWithoutSessionInput = {
@@ -515,6 +631,10 @@ export type ResumeUncheckedUpdateWithoutSessionInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiSummaryUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiExperienceUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSummaryReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiExperienceReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ResumeUncheckedUpdateManyWithoutSessionInput = {
@@ -525,6 +645,10 @@ export type ResumeUncheckedUpdateManyWithoutSessionInput = {
   content?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiSummaryUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiExperienceUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSummaryReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  aiExperienceReservedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -538,6 +662,10 @@ export type ResumeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdAt?: boolean
   updatedAt?: boolean
   sessionId?: boolean
+  aiSummaryUsed?: boolean
+  aiExperienceUsed?: boolean
+  aiSummaryReservedUntil?: boolean
+  aiExperienceReservedUntil?: boolean
   session?: boolean | Prisma.Resume$sessionArgs<ExtArgs>
 }, ExtArgs["result"]["resume"]>
 
@@ -550,6 +678,10 @@ export type ResumeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   createdAt?: boolean
   updatedAt?: boolean
   sessionId?: boolean
+  aiSummaryUsed?: boolean
+  aiExperienceUsed?: boolean
+  aiSummaryReservedUntil?: boolean
+  aiExperienceReservedUntil?: boolean
   session?: boolean | Prisma.Resume$sessionArgs<ExtArgs>
 }, ExtArgs["result"]["resume"]>
 
@@ -562,6 +694,10 @@ export type ResumeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   createdAt?: boolean
   updatedAt?: boolean
   sessionId?: boolean
+  aiSummaryUsed?: boolean
+  aiExperienceUsed?: boolean
+  aiSummaryReservedUntil?: boolean
+  aiExperienceReservedUntil?: boolean
   session?: boolean | Prisma.Resume$sessionArgs<ExtArgs>
 }, ExtArgs["result"]["resume"]>
 
@@ -574,9 +710,13 @@ export type ResumeSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   sessionId?: boolean
+  aiSummaryUsed?: boolean
+  aiExperienceUsed?: boolean
+  aiSummaryReservedUntil?: boolean
+  aiExperienceReservedUntil?: boolean
 }
 
-export type ResumeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "status" | "templateId" | "content" | "createdAt" | "updatedAt" | "sessionId", ExtArgs["result"]["resume"]>
+export type ResumeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "status" | "templateId" | "content" | "createdAt" | "updatedAt" | "sessionId" | "aiSummaryUsed" | "aiExperienceUsed" | "aiSummaryReservedUntil" | "aiExperienceReservedUntil", ExtArgs["result"]["resume"]>
 export type ResumeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   session?: boolean | Prisma.Resume$sessionArgs<ExtArgs>
 }
@@ -601,6 +741,10 @@ export type $ResumePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     createdAt: Date
     updatedAt: Date
     sessionId: string | null
+    aiSummaryUsed: boolean
+    aiExperienceUsed: boolean
+    aiSummaryReservedUntil: Date | null
+    aiExperienceReservedUntil: Date | null
   }, ExtArgs["result"]["resume"]>
   composites: {}
 }
@@ -1033,6 +1177,10 @@ export interface ResumeFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Resume", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Resume", 'DateTime'>
   readonly sessionId: Prisma.FieldRef<"Resume", 'String'>
+  readonly aiSummaryUsed: Prisma.FieldRef<"Resume", 'Boolean'>
+  readonly aiExperienceUsed: Prisma.FieldRef<"Resume", 'Boolean'>
+  readonly aiSummaryReservedUntil: Prisma.FieldRef<"Resume", 'DateTime'>
+  readonly aiExperienceReservedUntil: Prisma.FieldRef<"Resume", 'DateTime'>
 }
     
 

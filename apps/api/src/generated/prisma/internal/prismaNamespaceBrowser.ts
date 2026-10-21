@@ -89,7 +89,11 @@ export const ResumeScalarFieldEnum = {
   content: 'content',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  sessionId: 'sessionId'
+  sessionId: 'sessionId',
+  aiSummaryUsed: 'aiSummaryUsed',
+  aiExperienceUsed: 'aiExperienceUsed',
+  aiSummaryReservedUntil: 'aiSummaryReservedUntil',
+  aiExperienceReservedUntil: 'aiExperienceReservedUntil'
 } as const
 
 export type ResumeScalarFieldEnum = (typeof ResumeScalarFieldEnum)[keyof typeof ResumeScalarFieldEnum]
