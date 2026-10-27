@@ -149,7 +149,7 @@ export function RequireResume({
       cancelled = true
     }
 
-    // Executamos novamente apenas quando o usuário
+    // Executa novamente apenas quando o usuário
     // solicita uma nova tentativa.
     // O loadResume atualiza o contexto durante a restauração.
     // eslint-disable-next-line react-hooks/exhaustive-deps

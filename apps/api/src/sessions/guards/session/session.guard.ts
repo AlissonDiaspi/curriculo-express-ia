@@ -27,31 +27,19 @@ export class SessionGuard implements CanActivate {
       .switchToHttp()
       .getRequest<AuthenticatedRequest>();
 
-    const cookieToken: unknown =
+    /**
+     * A autenticação utiliza somente
+     * o cookie HttpOnly ce_session.
+     */
+    const token: unknown =
       request.cookies?.ce_session;
 
-    const authorization = request.headers.authorization;
-
-    let token: string | undefined;
-
-    if (typeof cookieToken === 'string') {
-      token = cookieToken;
-    } else if (authorization) {
-      const [type, value, extra] =
-        authorization.split(' ');
-
-      if (
-        type === 'Bearer' &&
-        value &&
-        extra === undefined
-      ) {
-        token = value;
-      }
-    }
-
-    if (!token || !/^[a-f0-9]{64}$/.test(token)) {
+    if (
+      typeof token !== 'string' ||
+      !/^[a-f0-9]{64}$/.test(token)
+    ) {
       throw new UnauthorizedException(
-        'Sessão não informada ou token inválido',
+        'Sessão não informada ou token inválido.',
       );
     }
 
@@ -60,10 +48,14 @@ export class SessionGuard implements CanActivate {
 
     if (!session) {
       throw new UnauthorizedException(
-        'Sessão inválida ou expirada',
+        'Sessão inválida ou expirada.',
       );
     }
 
+    /**
+     * Disponibiliza o ID da sessão
+     * para os controladores protegidos.
+     */
     request.sessionId = session.id;
 
     return true;

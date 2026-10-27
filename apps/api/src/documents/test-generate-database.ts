@@ -74,7 +74,7 @@ const resumeDocumentService = new ResumeDocumentService(
   resumesService,
   docxGenerator,
   pdfGenerator,
-  pdfWatermark,
+  
 );
 
     // 4. Gera o documento Word com os dados reais.

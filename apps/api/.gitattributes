@@ -1,1 +1,14 @@
-* text=auto eol=lf
+# Banco PostgreSQL (Docker Compose)
+DATABASE_URL="postgresql://curriculo_user:curriculo_dev_password@localhost:5432/curriculo_express?schema=public"
+
+# Servidor
+PORT=3001
+NODE_ENV=development
+FRONTEND_URL=http://localhost:3000
+
+# Google Gemini
+GEMINI_API_KEY=SUA_CHAVE_GEMINI_AQUI
+GEMINI_MODEL=SEU_MODELO_GEMINI_AQUI
+
+# Caminho do LibreOffice no Windows
+LIBREOFFICE_PATH=C:\Program Files\LibreOffice\program\soffice.exe

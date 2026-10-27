@@ -4,7 +4,6 @@ import {
   Body,
   Controller,
   Get,
-  Header,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -14,6 +13,8 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
+
+import { Throttle } from '@nestjs/throttler';
 
 import type { Response } from 'express';
 
@@ -52,7 +53,16 @@ export class ResumesController {
     return request.sessionId;
   }
 
+  /**
+   * Cria um novo currículo.
+   */
   @Post()
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: 60_000,
+    },
+  })
   create(
     @Req() request: AuthenticatedRequest,
     @Body() body: unknown,
@@ -76,6 +86,9 @@ export class ResumesController {
     }
   }
 
+  /**
+   * Busca um currículo da sessão atual.
+   */
   @Get(':id')
   findOne(
     @Req() request: AuthenticatedRequest,
@@ -87,6 +100,9 @@ export class ResumesController {
     );
   }
 
+  /**
+   * Gera a prévia do currículo em PDF.
+   */
   @Get(':id/preview')
   async preview(
     @Req() request: AuthenticatedRequest,
@@ -101,7 +117,8 @@ export class ResumesController {
 
     response.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'inline; filename="curriculo-previa.pdf"',
+      'Content-Disposition':
+        'inline; filename="curriculo-previa.pdf"',
       'Content-Length': pdfBuffer.length,
       'Cache-Control': 'no-store, private',
       'X-Content-Type-Options': 'nosniff',
@@ -110,6 +127,9 @@ export class ResumesController {
     response.end(pdfBuffer);
   }
 
+  /**
+   * Atualiza os dados de um currículo.
+   */
   @Patch(':id')
   update(
     @Req() request: AuthenticatedRequest,
@@ -134,5 +154,60 @@ export class ResumesController {
 
       throw error;
     }
+  }
+
+  /**
+   * Baixa o currículo em PDF.
+   */
+  @Get(':id/download/pdf')
+  async downloadPdf(
+    @Req() request: AuthenticatedRequest,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res() response: Response,
+  ) {
+    const pdfBuffer =
+      await this.resumeDocumentService.generatePdf(
+        this.getSessionId(request),
+        id,
+      );
+
+    response.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition':
+        'attachment; filename="curriculo.pdf"',
+      'Content-Length': pdfBuffer.length,
+      'Cache-Control': 'no-store, private',
+      'X-Content-Type-Options': 'nosniff',
+    });
+
+    response.end(pdfBuffer);
+  }
+
+  /**
+   * Baixa o currículo em Word .
+   */
+  @Get(':id/download/docx')
+  async downloadDocx(
+    @Req() request: AuthenticatedRequest,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res() response: Response,
+  ) {
+    const docxBuffer =
+      await this.resumeDocumentService.generateDocx(
+        this.getSessionId(request),
+        id,
+      );
+
+    response.set({
+      'Content-Type':
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'Content-Disposition':
+        'attachment; filename="curriculo.docx"',
+      'Content-Length': docxBuffer.length,
+      'Cache-Control': 'no-store, private',
+      'X-Content-Type-Options': 'nosniff',
+    });
+
+    response.end(docxBuffer);
   }
 }

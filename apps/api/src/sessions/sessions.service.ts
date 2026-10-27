@@ -1,8 +1,15 @@
 
 import { Injectable } from '@nestjs/common';
-import { randomBytes, createHash } from 'node:crypto';
+
+import {
+  randomBytes,
+  createHash,
+} from 'node:crypto';
 
 import { PrismaService } from '../prisma/prisma.service.js';
+
+const SESSION_DURATION_MS =
+  24 * 60 * 60 * 1000;
 
 @Injectable()
 export class SessionsService {
@@ -10,26 +17,40 @@ export class SessionsService {
     private readonly prisma: PrismaService,
   ) {}
 
-  async create() {
-    // Gera um token aleatório de 256 bits
-    const token = randomBytes(32).toString('hex');
-
-    // Armazena apenas o hash do token
-    const tokenHash = createHash('sha256')
+  /**
+   * Gera o hash SHA-256 do token.
+   *
+   * O token original nunca é
+   * armazenado no banco.
+   */
+  private hashToken(token: string): string {
+    return createHash('sha256')
       .update(token)
       .digest('hex');
+  }
 
-    // Sessão válida por 24 horas
+  /**
+   * Cria uma sessão anônima válida
+   * por 24 horas.
+   */
+  async create() {
+    const token =
+      randomBytes(32).toString('hex');
+
+    const tokenHash =
+      this.hashToken(token);
+
     const expiresAt = new Date(
-      Date.now() + 24 * 60 * 60 * 1000,
+      Date.now() + SESSION_DURATION_MS,
     );
 
-    const session = await this.prisma.anonymousSession.create({
-      data: {
-        tokenHash,
-        expiresAt,
-      },
-    });
+    const session =
+      await this.prisma.anonymousSession.create({
+        data: {
+          tokenHash,
+          expiresAt,
+        },
+      });
 
     return {
       token,
@@ -37,19 +58,40 @@ export class SessionsService {
     };
   }
 
+  /**
+   * Valida o token de sessão.
+   *
+   * Retorna null quando o token
+   * não existe ou está expirado.
+   */
   async validate(token: string) {
-    const tokenHash = createHash('sha256')
-      .update(token)
-      .digest('hex');
+    if (!/^[a-f0-9]{64}$/.test(token)) {
+      return null;
+    }
 
-    const session = await this.prisma.anonymousSession.findFirst({
-      where: {
-        tokenHash,
-        expiresAt: {
-          gt: new Date(),
+    const tokenHash =
+      this.hashToken(token);
+
+    /**
+     * tokenHash é único no Prisma.
+     * findUnique utiliza esse identificador.
+     */
+    const session =
+      await this.prisma.anonymousSession.findUnique({
+        where: {
+          tokenHash,
         },
-      },
-    });
+      });
+
+    if (!session) {
+      return null;
+    }
+
+    if (
+      session.expiresAt.getTime() <= Date.now()
+    ) {
+      return null;
+    }
 
     return session;
   }

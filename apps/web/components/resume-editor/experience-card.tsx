@@ -2,7 +2,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Sparkles } from 'lucide-react'
+import { FilePenLine } from 'lucide-react'
 
 import {
   CheckboxField,
@@ -158,8 +158,8 @@ export function ExperienceCard({
               disabled={!experience.description.trim()}
               className="group inline-flex h-11 items-center justify-center gap-2 rounded-full border border-primary/25 bg-card px-5 text-sm font-medium text-primary shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md focus-visible:ring-4 focus-visible:ring-ring/20 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <Sparkles
-                className="size-4 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110"
+              <FilePenLine
+                className="size-4 transition-transform duration-300 group-hover:scale-110"
                 aria-hidden="true"
               />
               Melhorar descrição com IA

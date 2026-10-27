@@ -10,8 +10,6 @@ import { DocxGeneratorService } from '../documents/services/docx-generator.servi
 
 import { PdfGeneratorService } from '../documents/services/pdf-generator.service.js';
 
-import { PdfWatermarkService } from '../documents/services/pdf-watermark.service.js';
-
 import {
   resumeContentSchema,
 } from './schemas/resume.schema.js';
@@ -28,32 +26,23 @@ export class ResumeDocumentService {
     private readonly resumesService: ResumesService,
     private readonly docxGenerator: DocxGeneratorService,
     private readonly pdfGenerator: PdfGeneratorService,
-    private readonly pdfWatermark: PdfWatermarkService,
   ) {}
 
   /**
-   * Gera o currículo em formato DOCX.
+   * Gera o currículo em formato Word.
    *
-   * Recupera os dados reais do PostgreSQL,
-   * valida o modelo selecionado e preenche
-   * o template correspondente.
-   *
-   * IMPORTANTE:
-   * Este método deve permanecer interno.
-   * O download limpo só será permitido após
-   * a confirmação do pagamento.
+   * Recupera os dados do PostgreSQL,
+   * valida o conteúdo e preenche o modelo.
    */
   async generateDocx(
     sessionId: string,
     resumeId: string,
   ): Promise<Buffer> {
-    // 1. Busca o currículo pertencente à sessão.
     const resume = await this.resumesService.findOne(
       sessionId,
       resumeId,
     );
 
-    // 2. Verifica se o modelo selecionado é válido.
     if (
       !resume.templateId ||
       !VALID_TEMPLATE_IDS.some(
@@ -65,7 +54,6 @@ export class ResumeDocumentService {
       );
     }
 
-    // 3. Valida o conteúdo recuperado do banco.
     const result = resumeContentSchema.safeParse(
       resume.content,
     );
@@ -76,7 +64,6 @@ export class ResumeDocumentService {
       );
     }
 
-    // 4. Gera o DOCX com o modelo selecionado.
     return this.docxGenerator.generateResume(
       resume.templateId,
       result.data,
@@ -84,52 +71,33 @@ export class ResumeDocumentService {
   }
 
   /**
-   * Gera o currículo em formato PDF.
-   *
-   * Reutiliza o DOCX gerado e realiza
-   * a conversão usando o LibreOffice.
-   *
-   * IMPORTANTE:
-   * Este método também deve permanecer interno
-   * até a confirmação do pagamento.
+   * Gera o currículo em PDF
    */
   async generatePdf(
     sessionId: string,
     resumeId: string,
   ): Promise<Buffer> {
-    // 1. Gera o DOCX com os dados reais.
     const docxBuffer = await this.generateDocx(
       sessionId,
       resumeId,
     );
 
-    // 2. Converte o DOCX para PDF.
     return this.pdfGenerator.convertDocxToPdf(
       docxBuffer,
     );
   }
 
   /**
-   * Gera uma prévia do currículo com marca d'água.
+   * Prévia do currículo.
    *
-   * Este método será utilizado na página /revisao
-   * para permitir a visualização antes do pagamento.
-   *
-   * A marca d'água é aplicada diretamente ao PDF.
    */
   async generatePreview(
     sessionId: string,
     resumeId: string,
   ): Promise<Buffer> {
-    // 1. Gera o PDF com os dados do currículo.
-    const pdfBuffer = await this.generatePdf(
+    return this.generatePdf(
       sessionId,
       resumeId,
-    );
-
-    // 2. Aplica a marca d'água no PDF.
-    return this.pdfWatermark.applyWatermark(
-      pdfBuffer,
     );
   }
 }

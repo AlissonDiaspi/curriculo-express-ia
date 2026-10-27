@@ -20,5 +20,8 @@ import { DocumentsModule } from '../documents/documents.module.js';
     ResumesService,
     ResumeDocumentService,
   ],
+   exports: [
+    ResumesService,
+  ],
 })
 export class ResumesModule {}

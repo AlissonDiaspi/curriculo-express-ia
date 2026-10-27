@@ -1,9 +1,12 @@
+
 'use client'
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'motion/react'
+
 import { ArrowRight, Menu, X } from 'lucide-react'
+
 import { Logo } from '@/components/layout/logo'
 import { PrimaryButton } from '@/components/shared/action-button'
 import { LANDING_NAV, ROUTES } from '@/lib/constants'
@@ -14,17 +17,35 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 12)
+    }
+
     onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+
+    window.addEventListener('scroll', onScroll, {
+      passive: true,
+    })
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+    }
   }, [])
 
   useEffect(() => {
     if (!open) return
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false)
+      }
+    }
+
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+
+    return () => {
+      window.removeEventListener('keydown', onKey)
+    }
   }, [open])
 
   return (
@@ -39,7 +60,11 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-6">
         <Logo />
 
-        <nav aria-label="Navegação principal" className="hidden md:block">
+        {/* Navegação desktop */}
+        <nav
+          aria-label="Navegação principal"
+          className="hidden md:block"
+        >
           <ul className="flex items-center gap-1">
             {LANDING_NAV.map((item) => (
               <li key={item.href}>
@@ -54,43 +79,79 @@ export function SiteHeader() {
           </ul>
         </nav>
 
+        {/* Botão desktop */}
         <div className="hidden md:block">
-          <PrimaryButton href={ROUTES.editor} size="sm">
-            Criar meu currículo
-            <ArrowRight className="transition-transform group-hover/action:translate-x-0.5" />
+          <PrimaryButton
+            href={ROUTES.editor}
+            size="sm"
+          >
+            Criar grátis
+
+            <ArrowRight
+              className="transition-transform group-hover/action:translate-x-0.5"
+              aria-hidden="true"
+            />
           </PrimaryButton>
         </div>
 
+        {/* Botão menu mobile */}
         <button
           type="button"
           className="inline-flex size-10 items-center justify-center rounded-full text-foreground hover:bg-accent focus-visible:ring-4 focus-visible:ring-ring/30 focus-visible:outline-none md:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
-          aria-label={open ? 'Fechar menu' : 'Abrir menu'}
-          onClick={() => setOpen((v) => !v)}
+          aria-label={
+            open ? 'Fechar menu' : 'Abrir menu'
+          }
+          onClick={() => setOpen((value) => !value)}
         >
-          {open ? <X className="size-5" /> : <Menu className="size-5" />}
+          {open ? (
+            <X className="size-5" />
+          ) : (
+            <Menu className="size-5" />
+          )}
         </button>
       </div>
 
+      {/* Menu mobile */}
       <AnimatePresence>
         {open && (
           <motion.nav
             id="mobile-menu"
             aria-label="Navegação mobile"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            initial={{
+              height: 0,
+              opacity: 0,
+            }}
+            animate={{
+              height: 'auto',
+              opacity: 1,
+            }}
+            exit={{
+              height: 0,
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.25,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="overflow-hidden md:hidden"
           >
             <ul className="flex flex-col gap-1 px-4 pt-2 pb-4">
               {LANDING_NAV.map((item, i) => (
                 <motion.li
                   key={item.href}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.04 * i }}
+                  initial={{
+                    opacity: 0,
+                    x: -8,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                  }}
+                  transition={{
+                    delay: 0.04 * i,
+                  }}
                 >
                   <Link
                     href={item.href}
@@ -101,10 +162,16 @@ export function SiteHeader() {
                   </Link>
                 </motion.li>
               ))}
+
               <li className="pt-2">
-                <PrimaryButton href={ROUTES.editor} size="lg" className="w-full" onClick={() => setOpen(false)}>
-                  Criar meu currículo
-                  <ArrowRight />
+                <PrimaryButton
+                  href={ROUTES.editor}
+                  size="lg"
+                  className="w-full"
+                  onClick={() => setOpen(false)}
+                >
+                  Criar currículo grátis
+                  <ArrowRight aria-hidden="true" />
                 </PrimaryButton>
               </li>
             </ul>

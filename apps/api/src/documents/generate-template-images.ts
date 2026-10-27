@@ -10,7 +10,6 @@ import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { TemplateLoaderService } from './services/template-loader.service.js';
 import { DocxGeneratorService } from './services/docx-generator.service.js';
 import { PdfGeneratorService } from './services/pdf-generator.service.js';
-import { PdfWatermarkService } from './services/pdf-watermark.service.js';
 
 import type {
   CreateResumeInput,
@@ -22,8 +21,7 @@ const TEMPLATE_IDS = [
   'modelo-03',
 ] as const;
 
-// Dados fictícios utilizados exclusivamente
-// para apresentar os modelos na página /modelos.
+// Dados fictícios para demonstrar os modelos.
 const content: CreateResumeInput['content'] = {
   personal: {
     fullName: 'João da Silva',
@@ -91,8 +89,7 @@ const content: CreateResumeInput['content'] = {
 };
 
 /**
- * Converte a primeira página de um PDF
- * em uma imagem PNG.
+ * Converte a primeira página do PDF em PNG.
  */
 async function pdfToPng(
   pdfBuffer: Buffer,
@@ -118,8 +115,6 @@ async function pdfToPng(
 
     const context = canvas.getContext('2d');
 
-    // Compatibiliza o canvas do Node.js
-    // com os tipos exigidos pelo PDF.js.
     await page.render({
       canvas: canvas as unknown as
         Parameters<typeof page.render>[0]['canvas'],
@@ -142,10 +137,9 @@ async function pdfToPng(
 
 /**
  * Gera as imagens de apresentação dos
- * três modelos disponíveis no sistema.
+ * três modelos, sem marcas d'água.
  */
 async function main() {
-  // Inicializa os serviços existentes.
   const loader = new TemplateLoaderService();
 
   const docxGenerator = new DocxGeneratorService(
@@ -154,9 +148,6 @@ async function main() {
 
   const pdfGenerator = new PdfGeneratorService();
 
-  const pdfWatermark = new PdfWatermarkService();
-
-  // O comando é executado a partir de apps/api.
   const outputDirectory = resolve(
     process.cwd(),
     '..',
@@ -176,7 +167,7 @@ async function main() {
   for (const templateId of TEMPLATE_IDS) {
     console.log(`Processando ${templateId}...`);
 
-    // 1. Gera o currículo DOCX com dados fictícios.
+    // 1. Gera o DOCX com dados fictícios.
     const docxBuffer =
       await docxGenerator.generateResume(
         templateId,
@@ -185,7 +176,7 @@ async function main() {
 
     console.log('DOCX gerado.');
 
-    // 2. Converte o DOCX para PDF.
+    // 2. Converte para PDF sem marca d'água.
     const pdfBuffer =
       await pdfGenerator.convertDocxToPdf(
         docxBuffer,
@@ -193,22 +184,14 @@ async function main() {
 
     console.log('PDF gerado.');
 
-    // 3. Aplica as três marcas d'água no PDF.
-    const watermarkedPdf =
-      await pdfWatermark.applyWatermark(
-        pdfBuffer,
-      );
-
-    console.log('Marcas d\'água aplicadas.');
-
-    // 4. Converte a primeira página marcada em PNG.
+    // 3. Converte a primeira página em PNG.
     const pngBuffer = await pdfToPng(
-      watermarkedPdf,
+      pdfBuffer,
     );
 
     console.log('PNG gerado.');
 
-    // 5. Salva a imagem na pasta pública do Next.js.
+    // 4. Substitui a miniatura antiga.
     const outputPath = join(
       outputDirectory,
       `${templateId}.png`,

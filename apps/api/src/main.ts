@@ -1,40 +1,59 @@
-
 import 'dotenv/config';
+
 import { NestFactory } from '@nestjs/core';
-import cookieParser from 'cookie-parser';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
 import { AppModule } from './app.module.js';
-import type { Request, Response, NextFunction } from 'express';
+import { configureHttp } from './config/configure-http.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(cookieParser());
-app.use((req: Request, res: Response, next: NextFunction) => {
-  const unsafeMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
+  // Mantém as configurações existentes de segurança e HTTP.
+  configureHttp(app);
 
-  if (!unsafeMethods.includes(req.method)) {
-    return next();
-  }
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Currículo Express IA — API')
+    .setDescription(
+      'Documentação da API do Currículo Express IA. ' +
+      'Permite criar sessões anônimas, gerenciar currículos, ' +
+      'melhorar textos com IA e gerar documentos em PDF e DOCX.',
+    )
+    .setVersion('1.0.0')
+    .addTag('Sessões', 'Gerenciamento de sessões anônimas')
+    .addTag('Currículos', 'Criação e edição de currículos')
+    .addTag('Inteligência Artificial', 'Melhoria de textos com IA')
+    .addTag('Documentos', 'Pré-visualização e downloads')
+    .addCookieAuth('ce_session', {
+      type: 'apiKey',
+      in: 'cookie',
+      name: 'ce_session',
+      description: 'Cookie HttpOnly criado pela API de sessões.',
+    })
+    .build();
 
-  const origin = req.headers.origin;
+  const swaggerDocument = SwaggerModule.createDocument(
+    app,
+    swaggerConfig,
+  );
 
-  if (origin && origin !== 'http://localhost:3000') {
-    return res.status(403).json({
-      message: 'Origem não permitida',
-    });
-  }
+  SwaggerModule.setup(
+    'api/docs',
+    app,
+    swaggerDocument,
+    {
+      customSiteTitle: 'Currículo Express IA | API Docs',
+    },
+  );
 
-  next();
-});
+  const port = Number(process.env.PORT ?? 3001);
 
-  app.enableCors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-    methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
+  await app.listen(port);
 
-  await app.listen(process.env.PORT ?? 3001);
+  console.log(`API iniciada em http://localhost:${port}`);
+  console.log(
+    `Swagger disponível em http://localhost:${port}/api/docs`,
+  );
 }
 
 void bootstrap();
